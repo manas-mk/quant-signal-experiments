@@ -1,0 +1,36 @@
+98 stocks, 168579 pair-windows, 42 formation dates (2016-01-08 to 2026-06-24)
+same-industry pairs: 8.9% of pair-windows
+
+Q1. Share of available pairs passing each test
+    Engle-Granger: 7.3% (chance level 6.5%)   Johansen: 13.6% (chance level 10.4%)   both: 4.4%
+    pairs available per date: 3081 to 4560
+    same-industry share: 8.9% of all pairs, 10.0% of Engle-Granger passes, 9.5% of Johansen passes
+
+Q2. Share cointegrated NEXT year, by the same test (95% block-bootstrap interval)
+    Engle-Granger all pairs          passed this year   7.3% [6.2, 8.3]  failed   7.0% [6.0, 7.9]  (n = 10799 vs 139164)
+    Engle-Granger same industry      passed this year   9.0% [7.3, 10.8]  failed   7.9% [6.6, 9.2]  (n = 1103 vs 12192)
+    Engle-Granger different industry passed this year   7.2% [5.9, 8.3]  failed   6.9% [5.9, 7.9]  (n = 9696 vs 126972)
+    Johansen      all pairs          passed this year  13.5% [11.1, 16.2]  failed  13.2% [10.7, 16.1]  (n = 19648 vs 130315)
+    Johansen      same industry      passed this year  15.6% [12.6, 18.2]  failed  14.3% [11.6, 17.3]  (n = 1878 vs 11417)
+    Johansen      different industry passed this year  13.3% [10.9, 16.0]  failed  13.1% [10.6, 16.0]  (n = 17770 vs 118898)
+
+Q3. By Engle-Granger p-value: still cointegrated next year / mean 6-month P&L (no protection)
+    p < 0.01    persistence   6.5% [5.0, 7.6]   P&L +0.54% [-0.89, +2.24]   (n = 2738)
+    p 0.01-0.05 persistence   7.7% [6.5, 8.8]   P&L -0.87% [-1.93, +0.06]   (n = 6756)
+    p 0.05-0.2  persistence   6.8% [5.9, 7.7]   P&L -0.67% [-1.62, +0.24]   (n = 20182)
+    p > 0.2     persistence   7.1% [6.0, 8.0]   P&L -0.55% [-1.49, +0.28]   (n = 92308)
+
+Q4. Mean 6-month P&L with no protection, by selection (beta > 0)
+    Engle-Granger passed  -0.46% [-1.04, +0.16]   losing 46%   (n = 9494)
+    Johansen passed       -0.31% [-0.90, +0.27]   losing 42%   (n = 16855)
+    both passed           -0.24% [-0.91, +0.43]   losing 46%   (n = 5684)
+    both failed           -0.59% [-1.58, +0.26]   losing 41%   (n = 101319)
+    Engle-Granger passed minus both failed: +0.13% [-0.45, +0.89]
+    Johansen passed minus both failed: +0.28% [-0.20, +0.96]
+    both passed minus both failed: +0.35% [-0.26, +1.19]
+
+Q5. Exit rules on pairs that passed Engle-Granger (beta > 0), next 6 months
+    no protection      mean -0.46% [-1.04, +0.16]   losing 46%   worst 5% below -20.0%
+    stop-loss |z|>3.5  mean -0.71% [-1.09, -0.31]   losing 60%   worst 5% below -8.5%
+    CUSUM alarm        mean -0.52% [-1.00, -0.16]   losing 56%   worst 5% below -8.6%
+    CUSUM fired in 91% of trades (median day 40); helped 48%, hurt 51%

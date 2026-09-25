@@ -1,0 +1,25 @@
+20 stocks, 190 pairs, 38 formation dates, 7220 pair-windows
+formation dates run from 2016-01-06 to 2025-06-17
+
+Q1. How many pairs pass the test (p < 0.05) on each date?
+    average 14.8 of 190; about 9.5 would pass by chance alone
+    range 0 to 36 per date
+    same-sector pairs: 21% of all pairs, 26% of passing pairs
+
+Q2. Share of pairs cointegrated NEXT year (95% block-bootstrap interval)
+    all pairs     cointegrated this year: 7.7% [4.7, 9.7]   not cointegrated: 7.6% [5.3, 10.0]   (n = 548 vs 6292)
+    same sector   cointegrated this year: 8.9% [4.4, 12.6]   not cointegrated: 10.9% [7.7, 14.5]   (n = 146 vs 1294)
+    cross sector  cointegrated this year: 7.2% [3.6, 9.7]   not cointegrated: 6.8% [4.6, 8.8]   (n = 402 vs 4998)
+
+Q3. By formation p-value: still cointegrated next year / mean 6-month P&L (no protection)
+    p < 0.01     persistence 6.9% [3.6, 10.1]   P&L +0.0173 [-0.0099, +0.0448]   (n = 141)
+    p 0.01-0.05  persistence 7.9% [4.6, 10.1]   P&L +0.0197 [+0.0078, +0.0307]   (n = 326)
+    p 0.05-0.2   persistence 7.5% [4.6, 10.0]   P&L +0.0141 [+0.0009, +0.0304]   (n = 987)
+    p > 0.2      persistence 7.7% [5.2, 10.1]   P&L +0.0133 [+0.0006, +0.0257]   (n = 4177)
+
+Q4. Trading the 467 pair-windows that passed (p < 0.05, beta > 0), next 6 months
+    no protection      mean +0.0190 [+0.0060, +0.0329]   losing 35%   worst 5% below -13.7%
+    stop-loss |z|>3.5  mean +0.0033 [-0.0031, +0.0110]   losing 52%   worst 5% below -6.2%
+    CUSUM alarm        mean +0.0021 [-0.0071, +0.0154]   losing 51%   worst 5% below -6.7%
+    CUSUM fired in 87% of trades; when it fired it helped in 39% and hurt in 60% (mean effect -1.95%)
+    passing minus non-passing pairs, mean P&L (no protection): +0.0056 [-0.0109, +0.0240]

@@ -2,19 +2,31 @@
 
 Small experiments that apply statistical signal-processing ideas to financial time series, with honest results, including the ones that don't work.
 
-![CUSUM alarm on INDUSINDBK/SHRIRAMFIN](pairs_breakdown/04_INDUSINDBK_SHRIRAMFIN.png)
-*An online CUSUM alarm (green line) fires just before a "cointegrated" pair breaks down. The unprotected strategy (blue) goes on to lose 0.44 in log returns, while the alarm keeps the strategy out of that trade.*
+![Does cointegration last? NIFTY 100](pairs_nifty100/02_persistence.png)
+*Across about 168,000 walk-forward tests on NIFTY 100 pairs (2016–2026), passing a cointegration test this year barely changes the chance of passing next year, under either Engle–Granger or Johansen.*
 
 ## Projects
 
-### [When does a pair break?](pairs_breakdown/)
-Pairs trading assumes two stocks keep moving together. Using NSE data from 2019–2024, including a pair from a published ESG pairs-trading paper, this project shows that:
+### 1. [When does a pair break?](pairs_breakdown/)
+A close look at two NSE pairs, one taken from a published ESG pairs-trading paper, from 2019 to 2024.
 
 - **Passing a cointegration test is not enough.** Both pairs tested cointegrated (p < 0.05) and still lost money afterwards.
-- **An online CUSUM alarm reacts much faster than a stop-loss:** 56 vs 142 days on one pair, and 330 vs 377 days on the other.
-- **Faster is not always better.** On one pair the alarm avoided the whole loss. On the other it also gave up about +0.5 of profit along the way, which the final P&L alone hides.
+- **An online CUSUM alarm reacted faster than a stop-loss**, and on one pair it avoided the whole loss.
+- **Faster is not always better.** On the other pair it gave up about +0.5 of profit, which the final P&L alone hides.
 
-[Read the full write-up →](pairs_breakdown/)
+### 2. [Does cointegration last? 20 stocks, 190 pairs](pairs_persistence/)
+The follow-up that checks whether project 1 generalizes. It tests all 190 pairs every quarter using only past data, with block-bootstrap intervals.
+
+- **Cointegration doesn't persist:** the next-year pass rate is 7.7% if the pair passes now and 7.6% if it doesn't.
+- **A smaller p-value is not a better pair.**
+- **The CUSUM alarm from project 1 does not generalize:** it fired in 87% of trades and hurt more often than it helped.
+
+### 3. [Scaling up: NIFTY 100, Engle–Granger vs Johansen](pairs_nifty100/)
+It covers 98 stocks and about 168,000 pair-windows, adds a second test, and measures each test's real false-positive rate.
+
+- **The persistence result holds at 25× the scale:** Engle–Granger 7.3% vs 7.0%, Johansen 13.5% vs 13.2%.
+- **Johansen's nominal 5% level is really about 10%** on one year of data. Without that check it would look twice as good at finding pairs.
+- **Neither test picks profitable pairs,** and the small profit in the 20-stock study disappears on the wider universe.
 
 ## Related work
 [eeg-correlation-regimes](https://github.com/manas-mk/eeg-correlation-regimes) uses the same rolling-correlation and change-point tools on EEG seizure data. It shows why random-matrix significance bounds fail on autocorrelated signals, the same trap that appears with financial returns.
