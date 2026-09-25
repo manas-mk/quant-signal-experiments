@@ -115,28 +115,34 @@ for test, now, nxt in [("Engle-Granger", "eg_pass", "eg_pass_next"), ("Johansen"
         say(f"    {test:13s} {grp:18s} passed this year {pct(yes)}  failed {pct(no)}  (n = {yes[3]} vs {no[3]})")
 say()
 
-fig, axes = plt.subplots(1, 2, figsize=(11, 4.3), sharey=True)
+fig, axes = plt.subplots(1, 2, figsize=(11, 4.8), sharey=True)
+ymax = max(max(r[2][2], r[3][2]) for r in q2) * 100 + 3.5
 for ax, test in zip(axes, ["Engle-Granger", "Johansen"]):
     rows = [r for r in q2 if r[0] == test]
     x = np.arange(len(rows))
-    for off, k, col, lab in [(-0.2, 2, "#1f77b4", "passed this year"), (0.2, 3, "#9aa7b8", "failed this year")]:
+    ax.axhline(100 * CHANCE[test], color="#d62728", ls="--", lw=1.2, zorder=1,
+               label="chance level (measured false-positive rate)")
+    for off, k, col, lab in [(-0.2, 2, "#1f77b4", "passed the test this year"),
+                             (0.2, 3, "#9aa7b8", "failed the test this year")]:
         est = np.array([r[k][0] for r in rows]) * 100
         err = np.array([[r[k][0] - r[k][1], r[k][2] - r[k][0]] for r in rows]).T * 100
-        ax.bar(x + off, est, 0.4, yerr=err, capsize=4, color=col, label=lab)
+        ax.bar(x + off, est, 0.38, color=col, label=lab, zorder=2)
+        ax.errorbar(x + off, est, yerr=err, fmt="none", ecolor="#333333", elinewidth=1, capsize=3, zorder=3)
         for xi, v, top in zip(x + off, est, est + err[1]):
-            ax.text(xi, top + 0.3, f"{v:.0f}%", ha="center", va="bottom", fontsize=9)
-    ax.axhline(100 * CHANCE[test], color="red", ls="--", lw=1,
-               label="chance level (measured false-positive rate)")
-    ax.text(len(rows) - 0.55, 100 * CHANCE[test] + 0.3, f"{100*CHANCE[test]:.1f}%",
-            color="red", fontsize=8, ha="right")
-    ax.set_xticks(x, [r[1] for r in rows], fontsize=9)
-    ax.set_title(test)
-axes[0].set_ylabel("% passing the same test the following year")
+            ax.text(xi, top + 0.25, f"{v:.1f}%", ha="center", va="bottom", fontsize=8.5)
+    ax.set_xticks(x, [r[1] for r in rows], fontsize=9.5)
+    ax.set_ylim(0, ymax)
+    ax.set_title(f"{test}   (chance level {100*CHANCE[test]:.1f}%)", fontsize=11)
+    ax.grid(axis="y", alpha=0.25, zorder=0)
+    ax.spines[["top", "right"]].set_visible(False)
+axes[0].set_ylabel("% passing the same test next year")
 handles, labels_ = axes[0].get_legend_handles_labels()
-fig.legend(handles, labels_, loc="lower center", ncol=3, fontsize=9, frameon=False)
-fig.suptitle("Does cointegration last? NIFTY 100 pairs, walk-forward, 95% intervals")
+fig.legend(handles[1:] + handles[:1], labels_[1:] + labels_[:1], loc="lower center", ncol=3,
+           fontsize=9.5, frameon=False)
+fig.suptitle("Does cointegration last?  NIFTY 100 pairs, walk-forward 2016-2026, 95% intervals",
+             fontsize=12.5, weight="bold")
 fig.tight_layout(rect=[0, 0.07, 1, 1])
-fig.savefig("02_persistence.png", dpi=120)
+fig.savefig("02_persistence.png", dpi=130)
 plt.close(fig)
 
 # ---------------------------------------------------------------- Q3
